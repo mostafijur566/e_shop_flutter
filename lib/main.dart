@@ -1,6 +1,7 @@
 import 'package:e_shop_flutter/pages/account_page.dart';
 import 'package:e_shop_flutter/pages/auth/sign_in_page.dart';
 import 'package:e_shop_flutter/pages/auth/sign_up_page.dart';
+import 'package:e_shop_flutter/pages/auth/sign_up_user_details_page.dart';
 import 'package:e_shop_flutter/pages/cart_page.dart';
 import 'package:e_shop_flutter/pages/home_page.dart';
 import 'package:e_shop_flutter/pages/product_details_page.dart';
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: SignUpPage()
+      home: SignUpUserDetailsPage()
     );
   }
 }

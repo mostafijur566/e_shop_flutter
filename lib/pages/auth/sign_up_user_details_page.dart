@@ -4,18 +4,19 @@ import '../../utils/app_colors.dart';
 import '../../widgets/app_text_field.dart';
 import '../../widgets/big_text.dart';
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+class SignUpUserDetailsPage extends StatefulWidget {
+  const SignUpUserDetailsPage({Key? key}) : super(key: key);
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  State<SignUpUserDetailsPage> createState() => _SignUpUserDetailsPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _SignUpUserDetailsPageState extends State<SignUpUserDetailsPage> {
 
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController usernameController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController billingAddressController = TextEditingController();
+  TextEditingController shippingAddressController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -33,34 +34,41 @@ class _SignUpPageState extends State<SignUpPage> {
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.25,
                 child: Center(
-                  child: Image.asset('assets/images/logo.png',
-                  width: 170,
-                )
+                    child: Image.asset('assets/images/logo.png',
+                      width: 170,
+                    )
                 ),
               ),
             ),
             AppTextField(
-              emailController: emailController,
-              hintText: 'Email',
-              icon: Icons.email,
+              emailController: nameController,
+              hintText: 'Name',
+              icon: Icons.person,
             ),
             SizedBox(
               height: 20,
             ),
 
             AppTextField(
-              emailController: usernameController,
-              hintText: 'Username',
-              icon: Icons.person,
+              emailController: billingAddressController,
+              hintText: 'Billing Address',
+              icon: Icons.location_on,
             ),
             SizedBox(
               height: 20,
             ),
             AppTextField(
-              emailController: passwordController,
-              hintText: 'Password',
-              icon: Icons.password_sharp,
-              hideText: true,
+              emailController: shippingAddressController,
+              hintText: 'Shipping Address',
+              icon: Icons.location_on,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            AppTextField(
+              emailController: phoneController,
+              hintText: 'Phone Number',
+              icon: Icons.phone,
             ),
             SizedBox(
               height: 30,
@@ -84,20 +92,10 @@ class _SignUpPageState extends State<SignUpPage> {
                     color: AppColors.mainColor),
                 child: Center(
                   child: BigText(
-                    text: 'Next',
+                    text: 'Sign Up',
                     color: Colors.white,
                     size: 26,
                   ),
-                ),
-              ),
-            ),
-            SizedBox(height: 10),
-            RichText(
-              text: TextSpan(
-                // recognizer: TapGestureRecognizer()..onTap = () => Get.back(),
-                text: 'Have an account already?',
-                style: TextStyle(
-                  color: Colors.grey,
                 ),
               ),
             ),

@@ -158,6 +158,7 @@ class _SignUpUserDetailsPageState extends State<SignUpUserDetailsPage> {
                   ),
                 ),
               ),
+              SizedBox(height: 30,)
             ],
           ),
         ),

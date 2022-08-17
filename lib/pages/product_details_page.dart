@@ -1,16 +1,53 @@
+import 'package:e_shop_flutter/controller/product_details_controller.dart';
+import 'package:e_shop_flutter/utils/app_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../controller/product_list_controller.dart';
 import '../utils/app_colors.dart';
 import '../widgets/app_icon.dart';
 import '../widgets/big_text.dart';
 import '../widgets/expandable_text_widget.dart';
+import 'package:get/get.dart';
 
-class ProductDetailsPage extends StatelessWidget {
-  const ProductDetailsPage({Key? key}) : super(key: key);
+class ProductDetailsPage extends StatefulWidget {
+  ProductDetailsPage({Key? key, required this.id}) : super(key: key);
+  final String id;
+  @override
+  State<ProductDetailsPage> createState() => _ProductDetailsPageState();
+}
+
+class _ProductDetailsPageState extends State<ProductDetailsPage> {
+
+  var name = '';
+  var price = '';
+  var description = '';
+  var image = '';
+  var stock = '';
+
+  @override
+  void initState() {
+    super.initState();
+    loadResource();
+  }
+
+  Future<void>loadResource() async{
+    await Get.find<ProductDetailsController>().getProduct(widget.id);
+    name = Get.find<ProductDetailsController>().name!;
+    image = Get.find<ProductDetailsController>().image!;
+    price = Get.find<ProductDetailsController>().price.toString();
+    stock = Get.find<ProductDetailsController>().stock.toString();
+    setState(() {
+      description = Get.find<ProductDetailsController>().description!;
+      print(description);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+
+    Get.lazyPut(() => ProductDetailsController(productDetailsRepo: Get.find()));
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: CustomScrollView(
@@ -24,11 +61,11 @@ class ProductDetailsPage extends StatelessWidget {
                 GestureDetector(
                     onTap: (){
 
-                      //Navigator.pop(context);
+                      Get.back();
                     },
                     child: AppIcon(icon: Icons.clear)
                 ),
-                   GestureDetector(
+                GestureDetector(
                     onTap: (){
 
                     },
@@ -60,11 +97,11 @@ class ProductDetailsPage extends StatelessWidget {
             bottom: PreferredSize(
               preferredSize: Size.fromHeight(20),
               child: Container(
-                padding: EdgeInsets.only(top: 10, bottom: 10),
+                padding: EdgeInsets.only(right: 10, left: 10, top: 10, bottom: 10),
                 width: double.maxFinite,
                 child: Center(
                     child: BigText(
-                      text: "Macbook",
+                      text: name,
                       size: 26,
                     )),
                 decoration: BoxDecoration(
@@ -79,8 +116,8 @@ class ProductDetailsPage extends StatelessWidget {
             backgroundColor: AppColors.yellowColor,
             expandedHeight: 300,
             flexibleSpace: FlexibleSpaceBar(
-              background: Image.asset(
-                'assets/images/macbook.jpg',
+              background: image == '' ? Image.asset('assets/images/loading.gif') : Image.network(
+                AppConstants.BASE_URL + image,
                 width: double.maxFinite,
                 fit: BoxFit.cover,
               ),
@@ -93,9 +130,7 @@ class ProductDetailsPage extends StatelessWidget {
                   padding: EdgeInsets.only(
                       left: 20, right: 20),
                   color: Colors.white,
-                  child: ExpandableTextWidget(
-                    text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-                  ),
+                  child: Text(description, style: TextStyle(fontSize: 16),)
                 ),
               ],
             ),
@@ -127,7 +162,7 @@ class ProductDetailsPage extends StatelessWidget {
                     ),
                   ),
                   BigText(
-                    text: '৳126000 x 1',
+                    text: 'Tk ${price} x 1',
                     color: AppColors.mainBlackColor,
                     size: 26,
                   ),

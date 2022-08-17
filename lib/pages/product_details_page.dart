@@ -19,11 +19,42 @@ class ProductDetailsPage extends StatefulWidget {
 
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
+  int cartItem = 1;
+
   var name = '';
   var price = '';
   var description = '';
   var image = '';
   var stock = '';
+
+  cartSystem(String tag){
+    if(tag == 'add'){
+      if(cartItem < 15 ) {
+        cartItem++;
+      }
+      else{
+        Get.snackbar('Item limit exceeded', 'You can\'t add more than 15',
+          colorText: Colors.white,
+          backgroundColor: Colors.red,
+          icon: Icon(Icons.warning, color: Colors.white,)
+        );
+      }
+    }
+    else if(tag == 'min'){
+      if(cartItem > 1 ) {
+        cartItem--;
+      }
+      else{
+        Get.snackbar('Item quantity can\'t be 0', 'You should have at-least one item in your cart',
+            colorText: Colors.white,
+            backgroundColor: Colors.red,
+            icon: Icon(Icons.warning, color: Colors.white,)
+        );
+      }
+    }
+    setState(() {
+    });
+  }
 
   @override
   void initState() {
@@ -39,7 +70,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     stock = Get.find<ProductDetailsController>().stock.toString();
     setState(() {
       description = Get.find<ProductDetailsController>().description!;
-      print(description);
     });
   }
 
@@ -152,7 +182,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 children: [
                   GestureDetector(
                     onTap: (){
-
+                      cartSystem("min");
                     },
                     child: AppIcon(
                       iconSize: 24,
@@ -162,14 +192,15 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     ),
                   ),
                   BigText(
-                    text: 'Tk ${price} x 1',
+                    text: 'Tk ${price} x $cartItem',
                     color: AppColors.mainBlackColor,
                     size: 26,
                   ),
                   GestureDetector(
                     onTap: ()
                     {
-
+                      cartSystem("add");
+                      print(cartItem);
                     },
                     child: AppIcon(
                       iconSize: 24,

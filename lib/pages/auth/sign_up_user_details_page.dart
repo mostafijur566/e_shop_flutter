@@ -1,3 +1,6 @@
+
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 
 import '../../utils/app_colors.dart';
@@ -17,6 +20,9 @@ class _SignUpUserDetailsPageState extends State<SignUpUserDetailsPage> {
   TextEditingController billingAddressController = TextEditingController();
   TextEditingController shippingAddressController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+
+  File? image;
+
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +45,29 @@ class _SignUpUserDetailsPageState extends State<SignUpUserDetailsPage> {
                     )
                 ),
               ),
+            ),
+
+            Container(
+              width: 130,
+              height: 130,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(65),
+                color: Colors.grey[200],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.camera_alt_outlined,
+                    size: 60,
+                    color: AppColors.mainColor,
+                  ),
+                  Text('Upload image', style: TextStyle(color: AppColors.mainColor),)
+                ],
+              )
+            ),
+            SizedBox(
+              height: 20,
             ),
             AppTextField(
               emailController: nameController,

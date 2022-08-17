@@ -173,8 +173,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           children: [
             Container(
               padding: EdgeInsets.only(
-                  left: 50,
-                  right: 50,
+                  left: 40,
+                  right: 40,
                   top: 10,
                   bottom: 10),
               child: Row(
@@ -250,8 +250,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     },
                     child: Container(
                       padding: EdgeInsets.only(
-                          top: 20,
-                          bottom: 20,
+                          top: 10,
+                          bottom: 10,
                           left: 20,
                           right: 20),
                       child: BigText(

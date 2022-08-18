@@ -8,6 +8,7 @@ import 'package:e_shop_flutter/pages/home_page.dart';
 import 'package:e_shop_flutter/pages/product_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'controller/auth_controller.dart';
 import 'helper/dependencies.dart' as dep;
 
 Future<void> main() async{
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
     Get.find<ProductListController>().getProduct();
+    Get.find<AuthController>().userLoggedIn();
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'E-Shop',
@@ -39,7 +41,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: HomePage()
+      home: SignInPage()
     );
   }
 }

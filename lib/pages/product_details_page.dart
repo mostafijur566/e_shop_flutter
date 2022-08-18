@@ -3,11 +3,9 @@ import 'package:e_shop_flutter/utils/app_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../controller/product_list_controller.dart';
 import '../utils/app_colors.dart';
 import '../widgets/app_icon.dart';
 import '../widgets/big_text.dart';
-import '../widgets/expandable_text_widget.dart';
 import 'package:get/get.dart';
 
 class ProductDetailsPage extends StatefulWidget {
@@ -26,6 +24,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   var description = '';
   var image = '';
   var stock = '';
+
+  int totalPrice = 0;
 
   cartSystem(String tag){
     if(tag == 'add'){
@@ -52,6 +52,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         );
       }
     }
+
+    totalPrice = int.parse(price) * cartItem;
     setState(() {
     });
   }
@@ -68,6 +70,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     image = Get.find<ProductDetailsController>().image!;
     price = Get.find<ProductDetailsController>().price.toString();
     stock = Get.find<ProductDetailsController>().stock.toString();
+    totalPrice = int.parse(price);
     setState(() {
       description = Get.find<ProductDetailsController>().description!;
     });
@@ -192,7 +195,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     ),
                   ),
                   BigText(
-                    text: 'Tk ${price} x $cartItem',
+                    text: 'Tk ${totalPrice} x $cartItem',
                     color: AppColors.mainBlackColor,
                     size: 26,
                   ),

@@ -1,9 +1,11 @@
 import 'package:e_shop_flutter/controller/product_list_controller.dart';
+import 'package:e_shop_flutter/pages/auth/sign_in_page.dart';
 import 'package:e_shop_flutter/pages/product_details_page.dart';
 import 'package:e_shop_flutter/utils/app_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../controller/auth_controller.dart';
 import '../utils/app_colors.dart';
 import '../widgets/big_text.dart';
 import '../widgets/custom_text.dart';
@@ -134,8 +136,22 @@ class _HomePageState extends State<HomePage> {
                                         children: [
                                           Icon(CupertinoIcons.cart, size: 24, color: Colors.white,),
                                           SizedBox(width: 5,),
-                                          CustomText(
-                                            text: 'Add to Cart', textColor: Colors.white, fontSize: 16,
+                                          GestureDetector(
+                                            onTap: () async{
+                                              if(Get.find<AuthController>().userLoggedIn()){
+                                                print('Your logged in');
+                                              }
+                                              else{
+                                                Get.snackbar('Please Log In!',
+                                                  'You need to log in to perform this action.',
+                                                  icon: Icon(Icons.warning)
+                                                );
+                                                Get.to(SignInPage());
+                                              }
+                                            },
+                                            child: CustomText(
+                                              text: 'Add to Cart', textColor: Colors.white, fontSize: 16,
+                                            ),
                                           ),
                                         ],
                                       ),

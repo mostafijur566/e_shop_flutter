@@ -33,7 +33,7 @@ class AppTextField extends StatelessWidget {
                 color: Colors.grey.withOpacity(0.2)
             ),
           ],
-          borderRadius: BorderRadius.circular(30)
+          borderRadius: BorderRadius.circular(15)
       ),
       child: TextField(
         obscureText: hideText,

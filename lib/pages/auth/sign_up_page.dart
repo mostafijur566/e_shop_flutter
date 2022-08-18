@@ -1,8 +1,14 @@
+import 'package:e_shop_flutter/controller/auth_controller.dart';
+import 'package:e_shop_flutter/pages/auth/sign_in_page.dart';
+import 'package:e_shop_flutter/pages/auth/sign_up_user_details_page.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/signup_body.dart';
 import '../../utils/app_colors.dart';
 import '../../widgets/app_text_field.dart';
 import '../../widgets/big_text.dart';
+import 'package:get/get.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -17,92 +23,141 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
 
+  void _registration(AuthController authController){
+    String email = emailController.text.toLowerCase().trim();
+    String username = usernameController.text.trim();
+    String password = passwordController.text;
+
+    if (email.isEmpty) {
+      Get.snackbar(
+        'Oops!',
+        'Email field cannot be empty!',
+        colorText: Colors.white,
+        backgroundColor: Colors.redAccent,
+      );
+    }
+
+    else if (username.isEmpty) {
+      Get.snackbar(
+        'Oops!',
+        'Username field cannot be empty!',
+        colorText: Colors.white,
+        backgroundColor: Colors.redAccent,
+      );
+    }
+
+    else if (password.isEmpty) {
+      Get.snackbar(
+        'Oops!',
+        'Password field cannot be empty!',
+        colorText: Colors.white,
+        backgroundColor: Colors.redAccent,
+      );
+    }
+
+    else if (password.length <= 6) {
+      Get.snackbar(
+        'Oops!',
+        'Password length should be at least 6 character!',
+        colorText: Colors.white,
+        backgroundColor: Colors.redAccent,
+      );
+    }
+
+    else{
+      SignUpBody signUpBody = SignUpBody(email: email, username: username, password: password);
+      authController.registration(signUpBody).then((status) async{
+        if(status.isSuccess){
+          Get.to(SignUpUserDetailsPage(user: username,));
+        }
+      });
+
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
-            ),
-            Hero(
-              tag: 'logo',
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.25,
-                child: Center(
-                  child: Image.asset('assets/images/logo.png',
-                  width: 170,
-                )
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: GetBuilder<AuthController>(builder: (_authController){
+          return SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.05,
                 ),
-              ),
-            ),
-            AppTextField(
-              emailController: emailController,
-              hintText: 'Email',
-              icon: Icons.email,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-
-            AppTextField(
-              emailController: usernameController,
-              hintText: 'Username',
-              icon: Icons.person,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            AppTextField(
-              emailController: passwordController,
-              hintText: 'Password',
-              icon: Icons.password_sharp,
-              hideText: true,
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            GestureDetector(
-              onTap: () {
-                try {
-                  setState(() {
-
-                  });
-
-                } catch (e) {
-
-                }
-              },
-              child: Container(
-                width: MediaQuery.of(context).size.width / 2,
-                height: MediaQuery.of(context).size.height / 13,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    color: AppColors.mainColor),
-                child: Center(
-                  child: BigText(
-                    text: 'Next',
-                    color: Colors.white,
-                    size: 26,
+                Hero(
+                  tag: 'logo',
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.25,
+                    child: Center(
+                        child: Image.asset('assets/images/logo.png',
+                          width: 170,
+                        )
+                    ),
                   ),
                 ),
-              ),
-            ),
-            SizedBox(height: 10),
-            RichText(
-              text: TextSpan(
-                // recognizer: TapGestureRecognizer()..onTap = () => Get.back(),
-                text: 'Have an account already?',
-                style: TextStyle(
-                  color: Colors.grey,
+                AppTextField(
+                  emailController: emailController,
+                  hintText: 'Email',
+                  icon: Icons.email,
                 ),
-              ),
+                SizedBox(
+                  height: 20,
+                ),
+
+                AppTextField(
+                  emailController: usernameController,
+                  hintText: 'Username',
+                  icon: Icons.person,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                AppTextField(
+                  emailController: passwordController,
+                  hintText: 'Password',
+                  icon: Icons.password_sharp,
+                  hideText: true,
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    _registration(_authController);
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width / 2,
+                    height: MediaQuery.of(context).size.height / 13,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: AppColors.mainColor),
+                    child: Center(
+                      child: BigText(
+                        text: 'Next',
+                        color: Colors.white,
+                        size: 26,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
+                RichText(
+                  text: TextSpan(
+                    recognizer: TapGestureRecognizer()..onTap = () => Get.off(SignInPage()),
+                    text: 'Have an account already?',
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },),
       ),
     );
   }

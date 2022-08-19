@@ -6,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
+import '../controller/cart_controller.dart';
+import '../controller/product_details_controller.dart';
 import '../controller/product_list_controller.dart';
 import '../controller/user_info_controller.dart';
 import '../utils/app_colors.dart';
@@ -32,6 +34,9 @@ class _NavBarState extends State<NavBar> {
   loadResource() async{
     await Get.find<ProductListController>().getProduct();
     await Get.find<UserInfoController>().getUserInfo();
+    await Get.find<CartController>().getCartItems();
+
+    await Get.find<CartController>().getCartItems();
   }
 
 
@@ -43,7 +48,6 @@ class _NavBarState extends State<NavBar> {
           child: Text('Empty'),
         ),
       ),
-      const CartPage(),
       const AccountPage()
     ];
   }
@@ -59,13 +63,6 @@ class _NavBarState extends State<NavBar> {
       PersistentBottomNavBarItem(
         icon: Icon(Icons.archive),
         title: ("Archive"),
-        activeColorPrimary: AppColors.mainColor,
-        inactiveColorPrimary: CupertinoColors.systemGrey,
-      ),
-
-      PersistentBottomNavBarItem(
-        icon: Icon(Icons.shopping_cart_outlined),
-        title: ("Cart"),
         activeColorPrimary: AppColors.mainColor,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),

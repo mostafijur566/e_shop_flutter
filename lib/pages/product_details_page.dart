@@ -1,8 +1,12 @@
 import 'package:e_shop_flutter/controller/product_details_controller.dart';
+import 'package:e_shop_flutter/pages/cart_page.dart';
 import 'package:e_shop_flutter/utils/app_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../controller/cart_controller.dart';
+import '../controller/user_info_controller.dart';
+import '../models/cart_model.dart';
 import '../utils/app_colors.dart';
 import '../widgets/app_icon.dart';
 import '../widgets/big_text.dart';
@@ -19,11 +23,13 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
   int cartItem = 1;
 
+  var user;
   var name = '';
   var price = '';
   var description = '';
   var image = '';
   var stock = '';
+  var productId = '';
 
   int totalPrice = 0;
 
@@ -65,7 +71,16 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   }
 
   Future<void>loadResource() async{
+
+    await Get.find<CartController>().getCartItems();
+
+    await Get.find<UserInfoController>().getUserInfo();
+    user = Get.find<UserInfoController>().user;
+    Get.find<CartController>();
+
     await Get.find<ProductDetailsController>().getProduct(widget.id);
+
+    productId = Get.find<ProductDetailsController>().productId.toString();
     name = Get.find<ProductDetailsController>().name!;
     image = Get.find<ProductDetailsController>().image!;
     price = Get.find<ProductDetailsController>().price.toString();
@@ -75,6 +90,11 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
       description = Get.find<ProductDetailsController>().description!;
     });
   }
+
+  _addToCart(CartModel cartModel) async{
+    await Get.find<CartController>().uploadCartItems(cartModel);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -102,28 +122,35 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     onTap: (){
 
                     },
-                    child: Stack(
-                      children: [
-                        AppIcon(icon: Icons.shopping_cart_outlined),
-                        Positioned(
-                          right: 0,
-                          top: 0,
-                          child: AppIcon(
-                            icon: Icons.circle,
-                            size: 20,
-                            iconColor: Colors.transparent,
-                            backgroundColor: AppColors.mainColor,
-                          ),) ,
+                    child: GetBuilder<CartController>(builder: (_cart){
+                      return GestureDetector(
+                        onTap: (){
+                          Get.to(CartPage());
+                        },
+                        child: Stack(
+                          children: [
+                            AppIcon(icon: Icons.shopping_cart_outlined),
+                            Positioned(
+                              right: 0,
+                              top: 0,
+                              child: AppIcon(
+                                icon: Icons.circle,
+                                size: 20,
+                                iconColor: Colors.transparent,
+                                backgroundColor: AppColors.mainColor,
+                              ),) ,
 
 
-                        Positioned(
-                          right: 6,
-                          top: 3,
-                          child: BigText(text: '5', size: 12, color: Colors.white,
-                          ),
+                            Positioned(
+                              right: int.parse(_cart.cartItem.toString()) <= 9 ? 6 : 3,
+                              top: 3,
+                              child: BigText(text: _cart.cartItem == null? '' : _cart.cartItem.toString(), size: 12, color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      );
+                    },)
                   )
               ],
             ),
@@ -235,36 +262,37 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                      padding: EdgeInsets.only(
-                          top: 20,
-                          bottom: 20,
-                          left: 20,
-                          right: 20),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Icon(CupertinoIcons.shopping_cart, color: AppColors.mainColor,)
-                  ),
                   GestureDetector(
                     onTap: (){
-
+                      CartModel cartModel = CartModel(user: user, productId: int.parse(productId), quantity: cartItem, totalPrice: totalPrice);
+                      _addToCart(cartModel);
                     },
                     child: Container(
-                      padding: EdgeInsets.only(
-                          top: 10,
-                          bottom: 10,
-                          left: 20,
-                          right: 20),
-                      child: BigText(
-                        text: '৳126000',
-                        color: Colors.white,
-                      ),
-                      decoration: BoxDecoration(
-                          color: AppColors.mainColor,
-                          borderRadius: BorderRadius.circular(20)),
+                        padding: EdgeInsets.only(
+                            top: 20,
+                            bottom: 20,
+                            left: 20,
+                            right: 20),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Icon(Icons.shopping_cart, color: AppColors.mainColor,)
                     ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(
+                        top: 10,
+                        bottom: 10,
+                        left: 20,
+                        right: 20),
+                    child: BigText(
+                      text: 'Tk ${totalPrice}',
+                      color: Colors.white,
+                    ),
+                    decoration: BoxDecoration(
+                        color: AppColors.mainColor,
+                        borderRadius: BorderRadius.circular(20)),
                   ),
                 ],
               ),

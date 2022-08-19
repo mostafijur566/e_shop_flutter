@@ -10,4 +10,8 @@ class CartRepo extends GetxService{
   Future<Response> uploadCartItems(CartModel cartModel) async{
     return await apiClient.postData(AppConstants.CART_ENDPOINT, cartModel.toJson());
   }
+
+  Future<Response> getCartItems() async{
+    return await apiClient.getData(AppConstants.CART_ENDPOINT);
+  }
 }

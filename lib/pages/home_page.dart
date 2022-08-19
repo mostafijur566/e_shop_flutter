@@ -2,6 +2,7 @@ import 'package:e_shop_flutter/controller/cart_controller.dart';
 import 'package:e_shop_flutter/controller/product_list_controller.dart';
 import 'package:e_shop_flutter/models/cart_model.dart';
 import 'package:e_shop_flutter/pages/auth/sign_in_page.dart';
+import 'package:e_shop_flutter/pages/cart_page.dart';
 import 'package:e_shop_flutter/pages/product_details_page.dart';
 import 'package:e_shop_flutter/utils/app_constants.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/material.dart';
 import '../controller/auth_controller.dart';
 import '../controller/user_info_controller.dart';
 import '../utils/app_colors.dart';
+import '../widgets/app_icon.dart';
 import '../widgets/big_text.dart';
 import '../widgets/custom_text.dart';
 import 'package:get/get.dart';
@@ -24,6 +26,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   var user;
+  int cartItems = 0;
 
   @override
   void initState() {
@@ -37,7 +40,12 @@ class _HomePageState extends State<HomePage> {
     await Get.find<UserInfoController>().getUserInfo();
     user = Get.find<UserInfoController>().user;
     Get.find<CartController>();
-    print(user);
+
+    await Get.find<CartController>().getCartItems();
+    cartItems = int.parse(Get.find<CartController>().cartItem.toString());
+    setState(() {
+
+    });
   }
 
   _addToCart(CartModel cartModel) async{
@@ -59,28 +67,60 @@ class _HomePageState extends State<HomePage> {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomText(
-                            text: 'Hello,',
-                            textColor: AppColors.titleColor,
-                            fontSize: 16),
-                        CustomText(
-                          text: _userInfo.name == null ? '' : _userInfo.name!,
-                          textColor: AppColors.mainBlackColor,
-                          fontSize: 18,
-                          weight: FontWeight.bold,
-                        ),
-                      ],
+                    Row(children: [
+                      _userInfo.image == null ? CircleAvatar(
+                        radius: 25,
+                        backgroundImage: AssetImage("assets/images/profile.jpg"),
+                      ) : CircleAvatar(
+                        radius: 25,
+                        backgroundImage: NetworkImage(AppConstants.BASE_URL + _userInfo.image!),
+                      ),
+                      SizedBox(width: 10,),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomText(
+                              text: 'Hello,',
+                              textColor: AppColors.titleColor,
+                              fontSize: 16),
+                          CustomText(
+                            text: _userInfo.name == null ? '' : _userInfo.name!,
+                            textColor: AppColors.mainBlackColor,
+                            fontSize: 18,
+                            weight: FontWeight.bold,
+                          ),
+                        ],
+                      ),
+                    ],
                     ),
-                    _userInfo.image == null ? CircleAvatar(
-                      radius: 25,
-                      backgroundImage: AssetImage("assets/images/profile.jpg"),
-                    ) : CircleAvatar(
-                      radius: 25,
-                      backgroundImage: NetworkImage(AppConstants.BASE_URL + _userInfo.image!),
-                    ),
+
+                    GestureDetector(
+                      onTap: (){
+                        Get.to(CartPage());
+                      },
+                      child: Stack(
+                        children: [
+                          AppIcon(icon: Icons.shopping_cart_outlined),
+                          Positioned(
+                            right: 0,
+                            top: 0,
+                            child: cartItems == 0 ? Container() : AppIcon(
+                              icon: Icons.circle,
+                              size: 20,
+                              iconColor: Colors.transparent,
+                              backgroundColor: AppColors.mainColor,
+                            ),) ,
+
+
+                          cartItems == 0 ? Container() : Positioned(
+                            right: cartItems <= 9 ? 6 : 3,
+                            top: 3,
+                            child: BigText(text: cartItems.toString(), size: 12, color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
                   ],
                 );
               }),
@@ -171,6 +211,7 @@ class _HomePageState extends State<HomePage> {
                                             onTap: () async{
                                               CartModel cartModel = CartModel(user: user, productId: product.allProductList[index].id, quantity: 1, totalPrice: product.allProductList[index].price);
                                               _addToCart(cartModel);
+                                              loadResource();
                                             },
                                             child: CustomText(
                                               text: 'Add to Cart', textColor: Colors.white, fontSize: 16,

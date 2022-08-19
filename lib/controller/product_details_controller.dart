@@ -10,6 +10,7 @@ class ProductDetailsController extends GetxController{
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
+  int? productId;
   String? name;
   int? price;
   String? description;
@@ -19,6 +20,7 @@ class ProductDetailsController extends GetxController{
   Future<void> getProduct(String id) async{
     Response response = await productDetailsRepo.getProduct(id);
     if(response.statusCode == 200){
+      productId = ProductDetails.fromJson(response.body).id;
       name = ProductDetails.fromJson(response.body).name;
       price = ProductDetails.fromJson(response.body).price;
       description = ProductDetails.fromJson(response.body).descriptions;
@@ -29,7 +31,7 @@ class ProductDetailsController extends GetxController{
     }
 
     else{
-      print(response.statusCode);
+      print(response.body);
     }
   }
 }

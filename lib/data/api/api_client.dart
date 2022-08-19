@@ -1,6 +1,7 @@
 import 'package:e_shop_flutter/utils/app_constants.dart';
 
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiClient extends GetConnect implements GetxService{
   late String token;
@@ -32,15 +33,14 @@ class ApiClient extends GetConnect implements GetxService{
     }
   }
 
-  Future<Response> getData(String uri,) async
-  {
+  Future<Response> getData(String uri) async{
     try{
-      Response response = await get(uri);
+      Response response = await get(uri, headers: _mainHeaders);
       return response;
     }
-    catch(e)
-    {
+    catch(e){
       return Response(statusCode: 1, statusText: e.toString());
     }
   }
+
 }

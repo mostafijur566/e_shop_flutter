@@ -3,6 +3,7 @@ import 'package:e_shop_flutter/pages/auth/sign_in_page.dart';
 import 'package:e_shop_flutter/pages/auth/sign_up_user_details_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import '../../models/signup_body.dart';
 import '../../utils/app_colors.dart';
@@ -81,80 +82,83 @@ class _SignUpPageState extends State<SignUpPage> {
       child: Scaffold(
         backgroundColor: Colors.white,
         body: GetBuilder<AuthController>(builder: (_authController){
-          return SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.05,
-                ),
-                Hero(
-                  tag: 'logo',
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.25,
-                    child: Center(
-                        child: Image.asset('assets/images/logo.png',
-                          width: 170,
-                        )
-                    ),
+          return ModalProgressHUD(
+            inAsyncCall: _authController.isLoading,
+            child: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.05,
                   ),
-                ),
-                AppTextField(
-                  emailController: emailController,
-                  hintText: 'Email',
-                  icon: Icons.email,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-
-                AppTextField(
-                  emailController: usernameController,
-                  hintText: 'Username',
-                  icon: Icons.person,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                AppTextField(
-                  emailController: passwordController,
-                  hintText: 'Password',
-                  icon: Icons.password_sharp,
-                  hideText: true,
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    _registration(_authController);
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width / 2,
-                    height: MediaQuery.of(context).size.height / 13,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: AppColors.mainColor),
-                    child: Center(
-                      child: BigText(
-                        text: 'Next',
-                        color: Colors.white,
-                        size: 26,
+                  Hero(
+                    tag: 'logo',
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.25,
+                      child: Center(
+                          child: Image.asset('assets/images/logo.png',
+                            width: 170,
+                          )
                       ),
                     ),
                   ),
-                ),
-                SizedBox(height: 10),
-                RichText(
-                  text: TextSpan(
-                    recognizer: TapGestureRecognizer()..onTap = () => Get.off(SignInPage()),
-                    text: 'Have an account already?',
-                    style: TextStyle(
-                      color: Colors.grey,
+                  AppTextField(
+                    emailController: emailController,
+                    hintText: 'Email',
+                    icon: Icons.email,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+
+                  AppTextField(
+                    emailController: usernameController,
+                    hintText: 'Username',
+                    icon: Icons.person,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  AppTextField(
+                    emailController: passwordController,
+                    hintText: 'Password',
+                    icon: Icons.password_sharp,
+                    hideText: true,
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      _registration(_authController);
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width / 2,
+                      height: MediaQuery.of(context).size.height / 13,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: AppColors.mainColor),
+                      child: Center(
+                        child: BigText(
+                          text: 'Next',
+                          color: Colors.white,
+                          size: 26,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(height: 10),
+                  RichText(
+                    text: TextSpan(
+                      recognizer: TapGestureRecognizer()..onTap = () => Get.off(SignInPage()),
+                      text: 'Have an account already?',
+                      style: TextStyle(
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },),

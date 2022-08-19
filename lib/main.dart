@@ -5,7 +5,9 @@ import 'package:e_shop_flutter/pages/auth/sign_up_page.dart';
 import 'package:e_shop_flutter/pages/auth/sign_up_user_details_page.dart';
 import 'package:e_shop_flutter/pages/cart_page.dart';
 import 'package:e_shop_flutter/pages/home_page.dart';
+import 'package:e_shop_flutter/pages/nav_bar.dart';
 import 'package:e_shop_flutter/pages/product_details_page.dart';
+import 'package:e_shop_flutter/pages/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'controller/auth_controller.dart';
@@ -24,7 +26,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    Get.find<ProductListController>().getProduct();
     Get.find<AuthController>().userLoggedIn();
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
@@ -41,7 +42,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: SignInPage()
+      home: SplashPage()
     );
   }
 }

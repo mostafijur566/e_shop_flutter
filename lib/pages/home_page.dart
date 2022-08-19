@@ -1,4 +1,6 @@
+import 'package:e_shop_flutter/controller/cart_controller.dart';
 import 'package:e_shop_flutter/controller/product_list_controller.dart';
+import 'package:e_shop_flutter/models/cart_model.dart';
 import 'package:e_shop_flutter/pages/auth/sign_in_page.dart';
 import 'package:e_shop_flutter/pages/product_details_page.dart';
 import 'package:e_shop_flutter/utils/app_constants.dart';
@@ -6,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../controller/auth_controller.dart';
+import '../controller/user_info_controller.dart';
 import '../utils/app_colors.dart';
 import '../widgets/big_text.dart';
 import '../widgets/custom_text.dart';
@@ -19,8 +22,32 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  var user;
+
+  @override
+  void initState() {
+    super.initState();
+    loadResource();
+  }
+
+  loadResource() async{
+    await Get.find<ProductListController>().getProduct();
+    await Get.find<UserInfoController>().getUserInfo();
+    await Get.find<UserInfoController>().getUserInfo();
+    user = Get.find<UserInfoController>().user;
+    Get.find<CartController>();
+    print(user);
+  }
+
+  _addToCart(CartModel cartModel) async{
+    await Get.find<CartController>().uploadCartItems(cartModel);
+  }
+
   @override
   Widget build(BuildContext context) {
+
+
 
     return Scaffold(
       body: SafeArea(
@@ -28,30 +55,35 @@ class _HomePageState extends State<HomePage> {
           padding: EdgeInsets.only(left: 20, right: 20, top: 10),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomText(
-                          text: 'Hello,',
-                          textColor: AppColors.titleColor,
-                          fontSize: 16),
-                      CustomText(
-                        text: 'Mostafijur Rahman',
-                        textColor: AppColors.mainBlackColor,
-                        fontSize: 18,
-                        weight: FontWeight.bold,
-                      ),
-                    ],
-                  ),
-                  CircleAvatar(
-                    radius: 25,
-                    backgroundImage: AssetImage('assets/images/profile.jpg'),
-                  ),
-                ],
-              ),
+              GetBuilder<UserInfoController>(builder: (_userInfo){
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomText(
+                            text: 'Hello,',
+                            textColor: AppColors.titleColor,
+                            fontSize: 16),
+                        CustomText(
+                          text: _userInfo.name == null ? '' : _userInfo.name!,
+                          textColor: AppColors.mainBlackColor,
+                          fontSize: 18,
+                          weight: FontWeight.bold,
+                        ),
+                      ],
+                    ),
+                    _userInfo.image == null ? CircleAvatar(
+                      radius: 25,
+                      backgroundImage: AssetImage("assets/images/profile.jpg"),
+                    ) : CircleAvatar(
+                      radius: 25,
+                      backgroundImage: NetworkImage(AppConstants.BASE_URL + _userInfo.image!),
+                    ),
+                  ],
+                );
+              }),
               SizedBox(height: 20,),
               Container(
                 padding: EdgeInsets.only(left: 10, right: 10),
@@ -74,8 +106,7 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(15)
                 ),
               ),
-              SizedBox(height: 20,),
-              BigText(text: 'Featured Products',),
+
               SizedBox(height: 20,),
               GetBuilder<ProductListController>(builder: (product){
                 return product.isLoading ? Expanded(
@@ -138,16 +169,8 @@ class _HomePageState extends State<HomePage> {
                                           SizedBox(width: 5,),
                                           GestureDetector(
                                             onTap: () async{
-                                              if(Get.find<AuthController>().userLoggedIn()){
-                                                print('Your logged in');
-                                              }
-                                              else{
-                                                Get.snackbar('Please Log In!',
-                                                  'You need to log in to perform this action.',
-                                                  icon: Icon(Icons.warning)
-                                                );
-                                                Get.to(SignInPage());
-                                              }
+                                              CartModel cartModel = CartModel(user: user, productId: product.allProductList[index].id, quantity: 1, totalPrice: product.allProductList[index].price);
+                                              _addToCart(cartModel);
                                             },
                                             child: CustomText(
                                               text: 'Add to Cart', textColor: Colors.white, fontSize: 16,

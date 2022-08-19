@@ -4,6 +4,7 @@ import 'package:e_shop_flutter/pages/auth/sign_in_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import '../../utils/app_colors.dart';
 import '../../widgets/app_text_field.dart';
@@ -103,117 +104,120 @@ class _SignUpUserDetailsPageState extends State<SignUpUserDetailsPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: GetBuilder<AuthController>(builder: (_authController){
-        return SafeArea(
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.05,
-                ),
-                Hero(
-                  tag: 'logo',
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.25,
-                    child: Center(
-                        child: Image.asset('assets/images/logo.png',
-                          width: 170,
+        return ModalProgressHUD(
+          inAsyncCall: _authController.isLoading,
+          child: SafeArea(
+            child: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.05,
+                  ),
+                  Hero(
+                    tag: 'logo',
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.25,
+                      child: Center(
+                          child: Image.asset('assets/images/logo.png',
+                            width: 170,
+                          )
+                      ),
+                    ),
+                  ),
+
+                  GestureDetector(
+                    onTap: (){
+                      _authController.pickedImage();
+                    },
+                    child: Container(
+                        width: 130,
+                        height: 130,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(65),
+                          color: Colors.grey[200],
+                        ),
+                        child: _authController.pickedFile == null ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.camera_alt_outlined,
+                              size: 60,
+                              color: AppColors.mainColor,
+                            ),
+                            Text('Upload image', style: TextStyle(color: AppColors.mainColor),)
+                          ],
+                        ) : Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(65),
+                              image: DecorationImage(
+                                  image:  FileImage(
+                                    File(_authController.pickedFile!.path).absolute,
+                                  ),
+                                  fit: BoxFit.cover
+                              )
+                          ),
                         )
                     ),
                   ),
-                ),
-
-                GestureDetector(
-                  onTap: (){
-                    _authController.pickedImage();
-                  },
-                  child: Container(
-                      width: 130,
-                      height: 130,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(65),
-                        color: Colors.grey[200],
-                      ),
-                      child: _authController.pickedFile == null ? Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.camera_alt_outlined,
-                            size: 60,
-                            color: AppColors.mainColor,
-                          ),
-                          Text('Upload image', style: TextStyle(color: AppColors.mainColor),)
-                        ],
-                      ) : Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(65),
-                            image: DecorationImage(
-                                image:  FileImage(
-                                  File(_authController.pickedFile!.path).absolute,
-                                ),
-                                fit: BoxFit.cover
-                            )
-                        ),
-                      )
+                  SizedBox(
+                    height: 20,
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                AppTextField(
-                  emailController: nameController,
-                  hintText: 'Name',
-                  icon: Icons.person,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
+                  AppTextField(
+                    emailController: nameController,
+                    hintText: 'Name',
+                    icon: Icons.person,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
 
-                AppTextField(
-                  emailController: billingAddressController,
-                  hintText: 'Billing Address',
-                  icon: Icons.location_on,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                AppTextField(
-                  emailController: shippingAddressController,
-                  hintText: 'Shipping Address',
-                  icon: Icons.location_on,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                AppTextField(
-                  emailController: phoneController,
-                  hintText: 'Phone Number',
-                  icon: Icons.phone,
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    _registration(_authController);
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width / 2,
-                    height: MediaQuery.of(context).size.height / 13,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: AppColors.mainColor),
-                    child: Center(
-                      child: BigText(
-                        text: 'Sign Up',
-                        color: Colors.white,
-                        size: 26,
+                  AppTextField(
+                    emailController: billingAddressController,
+                    hintText: 'Billing Address',
+                    icon: Icons.location_on,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  AppTextField(
+                    emailController: shippingAddressController,
+                    hintText: 'Shipping Address',
+                    icon: Icons.location_on,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  AppTextField(
+                    emailController: phoneController,
+                    hintText: 'Phone Number',
+                    icon: Icons.phone,
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      _registration(_authController);
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width / 2,
+                      height: MediaQuery.of(context).size.height / 13,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: AppColors.mainColor),
+                      child: Center(
+                        child: BigText(
+                          text: 'Sign Up',
+                          color: Colors.white,
+                          size: 26,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(height: 30,)
-              ],
+                  SizedBox(height: 30,)
+                ],
+              ),
             ),
           ),
         );

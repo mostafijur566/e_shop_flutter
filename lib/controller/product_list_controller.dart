@@ -24,7 +24,7 @@ class ProductListController extends GetxController{
       update();
     }
     else{
-      print('Product did not load');
+      print(response.body);
     }
   }
 }

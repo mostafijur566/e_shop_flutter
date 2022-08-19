@@ -20,6 +20,70 @@ class AuthController extends GetxController implements GetxService{
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
+  Future<ResponseModel> registration(SignUpBody signUpBody) async{
+    _isLoading = true;
+    update();
+    Response response = await authRepo.registration(signUpBody);
+    late ResponseModel responseModel;
+    if(response.statusCode == 200){
+      if(response.body["status"] == 400){
+        responseModel = ResponseModel(false, response.body["message"]);
+        Get.snackbar('Error!', response.body["message"].toString(),
+            colorText: Colors.white,
+            backgroundColor: Colors.redAccent);
+      }
+      else{
+        authRepo.saveUserToken(response.body["token"]);
+        responseModel = ResponseModel(true, response.body["message"]);
+      }
+    }
+    else{
+      responseModel = ResponseModel(false, response.statusText!);
+    }
+    _isLoading=false;
+    update();
+    return responseModel;
+  }
+
+  Future<ResponseModel> login(SignInBody signInBody) async{
+    _isLoading = true;
+    update();
+    Response response = await authRepo.login(signInBody);
+    late ResponseModel responseModel;
+    if(response.statusCode == 200){
+      authRepo.saveUserToken(response.body["token"]);
+      responseModel = ResponseModel(true, "success");
+    }
+    else{
+      responseModel = ResponseModel(false, "Unable to log in with provided credentials.");
+      Get.snackbar('Error!', "Unable to log in with provided credentials.",
+          colorText: Colors.white,
+          backgroundColor: Colors.redAccent
+      );
+    }
+    _isLoading=false;
+    update();
+    return responseModel;
+  }
+
+  Future <void> loggedInUser() async{
+    String token;
+    token = await authRepo.getUserToken();
+    authRepo.saveUserToken(token);
+  }
+
+  void saveEmailAndPassword(String email, String password){
+    authRepo.saveEmailAndPassowrd(email, password);
+  }
+
+  bool userLoggedIn(){
+    return authRepo.userLoggedIn();
+  }
+
+  Future<void> clearToken() async{
+    await authRepo.clearToken();
+  }
+
   PickedFile? _pickedFile;
   PickedFile? get pickedFile => _pickedFile;
 
@@ -79,64 +143,5 @@ class AuthController extends GetxController implements GetxService{
     return response;
   }
 
-  Future<ResponseModel> registration(SignUpBody signUpBody) async{
-    _isLoading = true;
-    update();
-    Response response = await authRepo.registration(signUpBody);
-    late ResponseModel responseModel;
-    if(response.statusCode == 200){
-        authRepo.saveUserToken(response.body["token"]);
-        responseModel = ResponseModel(true, response.body["message"]);
-    }
-    else{
-      responseModel = ResponseModel(false, response.body["message"]);
-      Get.snackbar('Error!', response.body["message"].toString(),
-          icon: Icon(Icons.warning_rounded, color: Colors.white,),
-          colorText: Colors.white,
-          backgroundColor: Colors.redAccent);
-    }
-    _isLoading=false;
-    update();
-    return responseModel;
-  }
 
-  Future<ResponseModel> login(SignInBody signInBody) async{
-    _isLoading = true;
-    update();
-    Response response = await authRepo.login(signInBody);
-    late ResponseModel responseModel;
-    if(response.statusCode == 200){
-      authRepo.saveUserToken(response.body["token"]);
-      responseModel = ResponseModel(true, "success");
-    }
-    else{
-      responseModel = ResponseModel(false, "Unable to log in with provided credentials.");
-      Get.snackbar('Error!', "Unable to log in with provided credentials.",
-          icon: Icon(Icons.warning_rounded, color: Colors.white,),
-        colorText: Colors.white,
-        backgroundColor: Colors.redAccent
-      );
-    }
-    _isLoading=false;
-    update();
-    return responseModel;
-  }
-
-  Future <void> loggedInUser() async{
-    String token;
-    token = await authRepo.getUserToken();
-    authRepo.saveUserToken(token);
-  }
-
-  void saveEmailAndPassword(String email, String password){
-    authRepo.saveEmailAndPassowrd(email, password);
-  }
-
-  bool userLoggedIn(){
-    return authRepo.userLoggedIn();
-  }
-
-  Future<void> clearToken() async{
-    await authRepo.clearToken();
-  }
 }

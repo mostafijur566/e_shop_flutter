@@ -9,6 +9,10 @@ class AppConstants{
 
   static const String LOGIN_ENDPOINT = "/api/v1/auth/login/";
 
+  static const String USER_INFO_ENDPOINT = "/api/v1/customer/details/";
+
+  static const String CART_ENDPOINT = "/api/v1/order/details/";
+
   static const String EMAIL = '';
 
   static const String PASSWORD = '';

@@ -1,4 +1,5 @@
 class UserInfoModel {
+  String? image;
   String? user;
   String? name;
   String? billingAddress;
@@ -6,16 +7,26 @@ class UserInfoModel {
   String? phone;
 
   UserInfoModel({
-    required this.user,
-    required this.name,
-    required this.billingAddress,
-    required this.shippingAddress,
-    required this.phone,
+    this.image,
+    this.user,
+    this.name,
+    this.billingAddress,
+    this.shippingAddress,
+    this.phone,
   });
+
+  UserInfoModel.fromJson(Map<String, dynamic> json){
+    image = json['image'];
+    user = json['user'];
+    name = json['name'];
+    billingAddress = json['billing_address'];
+    shippingAddress = json['shipping_address'];
+    phone = json['phone'];
+  }
 
   Map<String, dynamic> toJson(){
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data["user"] = user;
+    data["image"] = image;
     data["name"] = name;
     data["billing_address"] = billingAddress;
     data["shipping_address"] = shippingAddress;

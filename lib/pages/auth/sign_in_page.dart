@@ -1,7 +1,9 @@
 import 'package:e_shop_flutter/pages/auth/sign_up_page.dart';
 import 'package:e_shop_flutter/pages/home_page.dart';
+import 'package:e_shop_flutter/pages/nav_bar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import '../../controller/auth_controller.dart';
 import '../../models/signin_body.dart';
@@ -22,6 +24,12 @@ class _SignInPageState extends State<SignInPage> {
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
 
   void _login(AuthController authController) async{
 
@@ -60,7 +68,7 @@ class _SignInPageState extends State<SignInPage> {
       authController.login(signInBody).then((status)  async{
         if(status.isSuccess){
           await dep.init();
-          Get.off(HomePage());
+          Get.off(NavBar());
         }
         else{
         }
@@ -74,107 +82,110 @@ class _SignInPageState extends State<SignInPage> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: GetBuilder<AuthController>(builder: (_authController){
-          return SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.05,
-                ),
-                Hero(
-                  tag: 'logo',
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.25,
-                    child: Center(
-                        child: Image.asset('assets/images/logo.png',
-                          width: 170,
-                        )
-                    ),
+          return ModalProgressHUD(
+            inAsyncCall: _authController.isLoading,
+            child: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.05,
                   ),
-                ),
-
-                Container(
-                  width: double.maxFinite,
-                  margin: EdgeInsets.only(left: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Hello',
-                        style: TextStyle(
-                            fontSize: 20 * 3 + 20 / 2,
-                            fontWeight: FontWeight.bold
-                        ),
-                      ),
-
-                      Text('Sign into your account',
-                        style: TextStyle(
-                            fontSize: 20 ,
-                            color: Colors.grey[500]
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                AppTextField(
-                  emailController: emailController,
-                  hintText: 'Email',
-                  icon: Icons.email,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                AppTextField(
-                  emailController: passwordController,
-                  hintText: 'Password',
-                  icon: Icons.password_sharp,
-                  hideText: true,
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    _login(_authController);
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width / 2,
-                    height: MediaQuery.of(context).size.height / 13,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: AppColors.mainColor),
-                    child: Center(
-                      child: BigText(
-                        text: 'Sign In',
-                        color: Colors.white,
-                        size: 26,
+                  Hero(
+                    tag: 'logo',
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.25,
+                      child: Center(
+                          child: Image.asset('assets/images/logo.png',
+                            width: 170,
+                          )
                       ),
                     ),
                   ),
-                ),
-                SizedBox(height: 30),
-                RichText(
-                  text: TextSpan(
-                      text: 'Don\'t have an account?',
-                      style: const TextStyle(
-                        color: Colors.grey,
-                      ),
+
+                  Container(
+                    width: double.maxFinite,
+                    margin: EdgeInsets.only(left: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextSpan(
-                          recognizer: TapGestureRecognizer()..onTap = () => Get.to(() => SignUpPage()),
-                          text: ' Create',
-                          style: const TextStyle(
-                              color: Colors.black,
+                        Text('Hello',
+                          style: TextStyle(
+                              fontSize: 20 * 3 + 20 / 2,
                               fontWeight: FontWeight.bold
-                          ),),
-                      ]
+                          ),
+                        ),
+
+                        Text('Sign into your account',
+                          style: TextStyle(
+                              fontSize: 20 ,
+                              color: Colors.grey[500]
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  AppTextField(
+                    emailController: emailController,
+                    hintText: 'Email',
+                    icon: Icons.email,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  AppTextField(
+                    emailController: passwordController,
+                    hintText: 'Password',
+                    icon: Icons.password_sharp,
+                    hideText: true,
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      _login(_authController);
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width / 2,
+                      height: MediaQuery.of(context).size.height / 13,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: AppColors.mainColor),
+                      child: Center(
+                        child: BigText(
+                          text: 'Sign In',
+                          color: Colors.white,
+                          size: 26,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 30),
+                  RichText(
+                    text: TextSpan(
+                        text: 'Don\'t have an account?',
+                        style: const TextStyle(
+                          color: Colors.grey,
+                        ),
+                        children: [
+                          TextSpan(
+                            recognizer: TapGestureRecognizer()..onTap = () => Get.to(() => SignUpPage()),
+                            text: ' Create',
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold
+                            ),),
+                        ]
+                    ),
+
                   ),
 
-                ),
-
-              ],
+                ],
+              ),
             ),
           );
         },)

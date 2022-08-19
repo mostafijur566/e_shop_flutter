@@ -18,6 +18,7 @@ class CartController extends GetxController{
   bool get isLoading => _isLoading;
 
   String? cartItem;
+  int totalAmount = 0;
 
   Future<ResponseModel> uploadCartItems(CartModel cartModel) async{
     _isLoading = true;
@@ -52,8 +53,13 @@ class CartController extends GetxController{
 
     if(response.statusCode == 200){
       _allCartItems = [];
+      totalAmount = 0;
       _allCartItems.addAll(Cart.fromJson(response.body).allOrders);
       cartItem = Cart.fromJson(response.body).totalOrder.toString();
+
+      for(int i = 0; i < _allCartItems.length; i++){
+        totalAmount = totalAmount + int.parse(_allCartItems[i].totalPrice.toString());
+      }
 
       _isLoading = true;
       update();

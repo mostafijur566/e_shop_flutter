@@ -244,7 +244,7 @@ class _CartPageState extends State<CartPage> {
                       SizedBox(
                         width: 10,
                       ),
-                      BigText(text: '3'),
+                      BigText(text: 'Tk ${_cart.totalAmount.toString()}'),
                       SizedBox(
                         width: 10,
                       ),

@@ -1,4 +1,5 @@
 import 'package:e_shop_flutter/controller/cart_controller.dart';
+import 'package:e_shop_flutter/pages/product_details_page.dart';
 import 'package:e_shop_flutter/utils/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -98,7 +99,9 @@ class _CartPageState extends State<CartPage> {
                                 child: Row(
                                   children: [
                                     GestureDetector(
-                                      onTap: () {},
+                                      onTap: () {
+                                        Get.to(ProductDetailsPage(id: _cart.allCartItems[index].productId.toString()));
+                                      },
                                       child: _cart.allCartItems[index].productImage == null ? Container(
                                         width: 20 * 5,
                                         height: 20 * 5,

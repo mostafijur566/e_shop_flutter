@@ -7,8 +7,8 @@ class ProductListController extends GetxController{
   final ProductListRepo productRepo;
   ProductListController({required this.productRepo});
 
-  List<dynamic> _allProductList = [];
-  List<dynamic> get allProductList => _allProductList;
+  List<Products> _allProductList = [];
+  List<Products> get allProductList => _allProductList;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;

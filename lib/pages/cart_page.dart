@@ -1,4 +1,5 @@
 import 'package:e_shop_flutter/controller/cart_controller.dart';
+import 'package:e_shop_flutter/controller/order_controller.dart';
 import 'package:e_shop_flutter/pages/payment_page.dart';
 import 'package:e_shop_flutter/pages/product_details_page.dart';
 import 'package:e_shop_flutter/utils/app_constants.dart';
@@ -30,6 +31,7 @@ class _CartPageState extends State<CartPage> {
 
   Future<void>loadResource() async {
     await Get.find<CartController>().getCartItems();
+    await Get.find<OrderController>().getCartItems();
   }
 
 
@@ -80,7 +82,9 @@ class _CartPageState extends State<CartPage> {
                         )
                       ],
                     )),
-                Positioned(
+                _cart.allCartItems.isEmpty ? Center(
+                  child: Image.asset('assets/images/empty_cart.png'),
+                ) : Positioned(
                   top: 20 * 5,
                   left: 20,
                   right: 20,
@@ -215,66 +219,69 @@ class _CartPageState extends State<CartPage> {
             );
           },
         ),
-        bottomNavigationBar: Container(
-          height: 20 * 6,
-          padding: EdgeInsets.only(
-            top: 30,
-            bottom: 30,
-            left: 20,
-            right: 20,
-          ),
-          decoration: BoxDecoration(
-            color: AppColors.buttonBackgroundColor,
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(
-                20 * 2,
-              ),
-              topLeft: Radius.circular(20 * 2),
+        bottomNavigationBar: GetBuilder<OrderController>(builder: (_cart){
+          return Get.find<CartController>().allCartItems.isEmpty ? Container(
+            height: 0,
+          ) : Container(
+            height: 20 * 6,
+            padding: EdgeInsets.only(
+              top: 30,
+              bottom: 30,
+              left: 20,
+              right: 20,
             ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding:
+            decoration: BoxDecoration(
+              color: AppColors.buttonBackgroundColor,
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(
+                  20 * 2,
+                ),
+                topLeft: Radius.circular(20 * 2),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                    padding:
                     EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 10,
+                        ),
+                        BigText(text: 'Tk ${Get.find<CartController>().totalAmount.toString()}'),
+                        SizedBox(
+                          width: 10,
+                        ),
+                      ],
+                    )
                 ),
-                child: GetBuilder<CartController>(builder: (_cart){
-                  return Row(
-                    children: [
-                      SizedBox(
-                        width: 10,
-                      ),
-                      BigText(text: 'Tk ${_cart.totalAmount.toString()}'),
-                      SizedBox(
-                        width: 10,
-                      ),
-                    ],
-                  );
-                },)
-              ),
-              GestureDetector(
-                onTap: () {
-                  Get.to(PaymentPage());
-                },
-                child: Container(
-                  padding:
-                      EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
-                  child: BigText(
-                    text: 'Check out',
-                    color: Colors.white,
+                GestureDetector(
+                  onTap: () {
+
+                    Get.to(PaymentPage(totalPrice: _cart.totalAmount, ordersId: _cart.orderId, cartId: Get.find<CartController>().orderId,));
+                  },
+                  child: Container(
+                    padding:
+                    EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
+                    child: BigText(
+                      text: 'Check out',
+                      color: Colors.white,
+                    ),
+                    decoration: BoxDecoration(
+                        color: AppColors.mainColor,
+                        borderRadius: BorderRadius.circular(20)),
                   ),
-                  decoration: BoxDecoration(
-                      color: AppColors.mainColor,
-                      borderRadius: BorderRadius.circular(20)),
                 ),
-              ),
-            ],
-          ),
-        ),
+              ],
+            ),
+          );
+        },)
     );
   }
 }

@@ -14,4 +14,8 @@ class CartRepo extends GetxService{
   Future<Response> getCartItems() async{
     return await apiClient.getData(AppConstants.CART_ENDPOINT);
   }
+  
+  Future<Response> deleteCartItems(String id) async{
+    return await apiClient.deleteData("/api/v1/cart/details/$id/");
+  }
 }

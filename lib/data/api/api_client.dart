@@ -33,9 +33,21 @@ class ApiClient extends GetConnect implements GetxService{
     }
   }
 
+
   Future<Response> getData(String uri) async{
     try{
       Response response = await get(uri, headers: _mainHeaders);
+      return response;
+    }
+    catch(e){
+      return Response(statusCode: 1, statusText: e.toString());
+    }
+  }
+
+
+  Future<Response> deleteData(String uri) async{
+    try{
+      Response response = await delete(uri, headers: _mainHeaders);
       return response;
     }
     catch(e){

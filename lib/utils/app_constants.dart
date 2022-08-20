@@ -11,7 +11,11 @@ class AppConstants{
 
   static const String USER_INFO_ENDPOINT = "/api/v1/customer/details/";
 
-  static const String CART_ENDPOINT = "/api/v1/order/details/";
+  static const String CART_ENDPOINT = "/api/v1/cart/details/";
+
+  static const String ORDER_ENDPOINT = "/api/v1/order/details/";
+
+  static const String MAKE_ORDER_ENDPOINT = "/api/v1/order/";
 
   static const String EMAIL = '';
 

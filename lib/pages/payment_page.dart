@@ -1,3 +1,7 @@
+import 'package:e_shop_flutter/controller/cart_controller.dart';
+import 'package:e_shop_flutter/controller/make_order_controller.dart';
+import 'package:e_shop_flutter/controller/order_controller.dart';
+import 'package:e_shop_flutter/models/make_order_model.dart';
 import 'package:e_shop_flutter/utils/app_colors.dart';
 import 'package:e_shop_flutter/widgets/big_text.dart';
 import 'package:e_shop_flutter/widgets/button.dart';
@@ -7,9 +11,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+
+import '../controller/user_info_controller.dart';
+import 'nav_bar.dart';
 
 class PaymentPage extends StatefulWidget {
-  const PaymentPage({Key? key}) : super(key: key);
+  const PaymentPage({Key? key, required this.totalPrice, required this.ordersId, required this.cartId}) : super(key: key);
+
+  final int totalPrice;
+  final List<int> ordersId;
+  final List<int> cartId;
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -17,10 +29,51 @@ class PaymentPage extends StatefulWidget {
 
 class _PaymentPageState extends State<PaymentPage> {
 
-  int _value = 3;
+  String paymentGateway = 'cash on delivery';
+  int _value = 1;
+  var user;
+
+  @override
+  void initState() {
+    super.initState();
+    loadResource();
+    print(widget.ordersId);
+  }
+
+  loadResource() async{
+    await Get.find<CartController>();
+    await Get.find<CartController>().getCartItems();
+
+    await Get.find<OrderController>();
+    await Get.find<OrderController>().getCartItems();
+
+    await Get.find<MakeOrderController>();
+
+    await Get.find<UserInfoController>().getUserInfo();
+    user = Get.find<UserInfoController>().user;
+    print(user);
+  }
+
+  _deleteOrder(String id) async{
+    await Get.find<CartController>().deleteOrderItems(id);
+  }
+
+  _makeOder(MakeOrderController makeOrderController){
+    MakeOrderModel makeOrderModel = MakeOrderModel(user: user, orderDetails: widget.ordersId, totalPrice: widget.totalPrice, paymentStatus: paymentGateway);
+    makeOrderController.makeOrder(makeOrderModel).then((status){
+      if(status.isSuccess){
+        for(int i = 0; i < widget.cartId.length; i++){
+          _deleteOrder(widget.cartId[i].toString());
+        }
+        Get.off(NavBar());
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+
+    Get.lazyPut(() => MakeOrderController(makeOrderRepo: Get.find()));
 
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -57,6 +110,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         onChanged: (value){
                           setState(() {
                             _value = int.parse(value.toString());
+                            paymentGateway = 'cash on delivery';
                           });
                         }
                         ),
@@ -90,6 +144,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         onChanged: (value){
                           setState(() {
                             _value = int.parse(value.toString());
+                            paymentGateway = 'bKash';
                           });
                         }
                     ),
@@ -124,6 +179,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         onChanged: (value){
                           setState(() {
                             _value = int.parse(value.toString());
+                            paymentGateway = 'nagad';
                           });
                         }
                     ),
@@ -157,6 +213,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         onChanged: (value){
                           setState(() {
                             _value = int.parse(value.toString());
+                            paymentGateway = 'card';
                           });
                         }
                     ),
@@ -192,16 +249,18 @@ class _PaymentPageState extends State<PaymentPage> {
         ),
       ),
 
-      bottomNavigationBar: Container(
-        height: height * 0.1,
-        padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
-        child: MyButton(
-          label: "Complete Order - Tk 130000",
-          onTap: (){
-
-          },
-        ),
-      ),
+      bottomNavigationBar: GetBuilder<MakeOrderController>(builder: (order){
+        return Container(
+          height: height * 0.1,
+          padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+          child: MyButton(
+            label: "Complete Order - Tk ${widget.totalPrice}",
+            onTap: (){
+              _makeOder(order);
+            },
+          ),
+        );
+      },)
     );
   }
 }

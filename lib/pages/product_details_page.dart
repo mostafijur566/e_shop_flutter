@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../controller/cart_controller.dart';
+import '../controller/order_controller.dart';
 import '../controller/user_info_controller.dart';
 import '../models/cart_model.dart';
 import '../utils/app_colors.dart';
@@ -73,10 +74,12 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   Future<void>loadResource() async{
 
     await Get.find<CartController>().getCartItems();
+    await Get.find<OrderController>().getCartItems();
 
     await Get.find<UserInfoController>().getUserInfo();
     user = Get.find<UserInfoController>().user;
     Get.find<CartController>();
+    Get.find<OrderController>();
 
     await Get.find<ProductDetailsController>().getProduct(widget.id);
 
@@ -93,6 +96,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
   _addToCart(CartModel cartModel) async{
     await Get.find<CartController>().uploadCartItems(cartModel);
+  }
+
+  _addToOrder(CartModel cartModel) async{
+    await Get.find<OrderController>().uploadCartItems(cartModel);
   }
 
 
@@ -265,6 +272,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   GestureDetector(
                     onTap: (){
                       CartModel cartModel = CartModel(user: user, productId: int.parse(productId), quantity: cartItem, totalPrice: totalPrice);
+                      _addToOrder(cartModel);
                       _addToCart(cartModel);
                     },
                     child: Container(

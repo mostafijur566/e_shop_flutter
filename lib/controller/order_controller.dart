@@ -1,5 +1,4 @@
-import 'package:e_shop_flutter/controller/product_details_controller.dart';
-import 'package:e_shop_flutter/data/repository/cart_repo.dart';
+import 'package:e_shop_flutter/data/repository/order_repo.dart';
 import 'package:e_shop_flutter/models/cart_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,9 +6,9 @@ import 'package:get/get.dart';
 import '../models/cart_get_items_model.dart';
 import '../models/response_model.dart';
 
-class CartController extends GetxController{
-  final CartRepo cartRepo;
-  CartController({required this.cartRepo});
+class OrderController extends GetxController{
+  final OrderRepo orderRepo;
+  OrderController({required this.orderRepo});
 
   List<dynamic> _allCartItems = [];
   List<dynamic> get allCartItems => _allCartItems;
@@ -27,15 +26,11 @@ class CartController extends GetxController{
     _isLoading = true;
     update();
 
-    Response response = await cartRepo.uploadCartItems(cartModel);
+    Response response = await orderRepo.uploadCartItems(cartModel);
     late ResponseModel responseModel;
 
     if(response.statusCode == 200){
       responseModel = ResponseModel(true, response.body["message"]);
-        Get.snackbar('Added!', response.body["message"].toString(),
-            colorText: Colors.white,
-            backgroundColor: Colors.green
-        );
 
     }
     else{
@@ -52,7 +47,7 @@ class CartController extends GetxController{
 
 
   Future<void> getCartItems() async{
-    Response response = await cartRepo.getCartItems();
+    Response response = await orderRepo.getCartItems();
 
     if(response.statusCode == 200){
       _allCartItems = [];
@@ -75,18 +70,6 @@ class CartController extends GetxController{
           colorText: Colors.white,
           backgroundColor: Colors.redAccent
       );
-    }
-  }
-
-  Future<void> deleteOrderItems(String id) async{
-    Response response = await cartRepo.deleteCartItems(id);
-
-    if(response.statusCode == 200){
-      
-    }
-
-    else{
-      print('can not delete order');
     }
   }
 }

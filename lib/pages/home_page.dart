@@ -1,4 +1,5 @@
 import 'package:e_shop_flutter/controller/cart_controller.dart';
+import 'package:e_shop_flutter/controller/order_controller.dart';
 import 'package:e_shop_flutter/controller/product_list_controller.dart';
 import 'package:e_shop_flutter/models/cart_model.dart';
 import 'package:e_shop_flutter/pages/auth/sign_in_page.dart';
@@ -51,6 +52,7 @@ class _HomePageState extends State<HomePage> {
     await Get.find<UserInfoController>().getUserInfo();
     user = Get.find<UserInfoController>().user;
     Get.find<CartController>();
+    Get.find<OrderController>();
 
     await Get.find<CartController>().getCartItems();
     cartItems = int.parse(Get.find<CartController>().cartItem.toString());
@@ -63,6 +65,14 @@ class _HomePageState extends State<HomePage> {
     await Get.find<CartController>().uploadCartItems(cartModel).then((status){
       if(status.isSuccess){
         showSpinner = false;
+      }
+    });
+  }
+
+  _addToOrder(CartModel cartModel) async{
+    await Get.find<OrderController>().uploadCartItems(cartModel).then((status){
+      if(status.isSuccess){
+
       }
     });
   }
@@ -261,6 +271,7 @@ class _HomePageState extends State<HomePage> {
                                               onTap: () async{
                                                 showSpinner = true;
                                                 CartModel cartModel = CartModel(user: user, productId: foundProducts[index].id, quantity: 1, totalPrice: foundProducts[index].price);
+                                                _addToOrder(cartModel);
                                                 _addToCart(cartModel);
                                                 loadResource();
                                               },

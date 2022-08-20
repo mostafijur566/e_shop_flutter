@@ -95,6 +95,7 @@ class AuthController extends GetxController implements GetxService{
   }
 
   Future<ResponseModel> uploadUserData(String user, String name, String billingAddress, String shippingAddress, String phone) async{
+    _isLoading = true;
     update();
 
     http.StreamedResponse response = await updateProfile(_pickedFile, user, name, billingAddress, shippingAddress, phone);
@@ -121,6 +122,8 @@ class AuthController extends GetxController implements GetxService{
       );
     }
 
+    _isLoading = false;
+    update();
     return responseModel;
   }
 

@@ -1,4 +1,5 @@
 import 'package:e_shop_flutter/controller/cart_controller.dart';
+import 'package:e_shop_flutter/pages/payment_page.dart';
 import 'package:e_shop_flutter/pages/product_details_page.dart';
 import 'package:e_shop_flutter/utils/app_constants.dart';
 import 'package:flutter/material.dart';
@@ -256,7 +257,9 @@ class _CartPageState extends State<CartPage> {
                 },)
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Get.to(PaymentPage());
+                },
                 child: Container(
                   padding:
                       EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),

@@ -6,6 +6,7 @@ import 'package:e_shop_flutter/pages/auth/sign_up_user_details_page.dart';
 import 'package:e_shop_flutter/pages/cart_page.dart';
 import 'package:e_shop_flutter/pages/home_page.dart';
 import 'package:e_shop_flutter/pages/nav_bar.dart';
+import 'package:e_shop_flutter/pages/payment_page.dart';
 import 'package:e_shop_flutter/pages/product_details_page.dart';
 import 'package:e_shop_flutter/pages/splash_page.dart';
 import 'package:flutter/material.dart';

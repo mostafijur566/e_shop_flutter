@@ -1,6 +1,7 @@
 import 'package:e_shop_flutter/pages/auth/sign_up_page.dart';
 import 'package:e_shop_flutter/pages/home_page.dart';
 import 'package:e_shop_flutter/pages/nav_bar.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -35,11 +36,21 @@ class _SignInPageState extends State<SignInPage> {
 
     String email = emailController.text.toLowerCase().trim();
     String password = passwordController.text;
-
+    final bool isValid = EmailValidator.validate(email);
+    print(isValid);
     if (email.isEmpty) {
       Get.snackbar(
-        'Oops!',
+        'Required!',
         'Email field cannot be empty!',
+        colorText: Colors.white,
+        backgroundColor: Colors.redAccent,
+      );
+    }
+
+    else if (!isValid) {
+      Get.snackbar(
+        'Invalid!',
+        'Please enter a valid email address!',
         colorText: Colors.white,
         backgroundColor: Colors.redAccent,
       );
@@ -47,21 +58,13 @@ class _SignInPageState extends State<SignInPage> {
 
     else if (password.isEmpty) {
       Get.snackbar(
-        'Oops!',
+        'Required!',
         'Password field cannot be empty!',
         colorText: Colors.white,
         backgroundColor: Colors.redAccent,
       );
     }
 
-    else if (password.length <= 6) {
-      Get.snackbar(
-        'Oops!',
-        'Password length should be at least 6 character!',
-        colorText: Colors.white,
-        backgroundColor: Colors.redAccent,
-      );
-    }
 
     else{
       SignInBody signInBody = SignInBody(username: email, password: password);

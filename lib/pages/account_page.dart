@@ -74,11 +74,12 @@ class _AccountPageState extends State<AccountPage> {
     Get.lazyPut(() => UserInfoController(userInfoRepo: Get.find()));
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.mainColor,
-        title: Text('Profile'),
+        backgroundColor: Colors.white,
+        title: Text('Profile', style: TextStyle(color: AppColors.mainBlackColor),),
         centerTitle: true,
+        elevation: 0,
       ),
       body: GetBuilder<UserInfoController>(builder: (_userInfo){
         return ModalProgressHUD(

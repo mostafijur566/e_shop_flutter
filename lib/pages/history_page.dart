@@ -30,6 +30,7 @@ class _HistoryPageState extends State<HistoryPage> {
           children: [
             Expanded(
               child: ListView.builder(
+                  physics: BouncingScrollPhysics(),
                   itemCount: 5,
                   itemBuilder: (context, index) {
                     return Container(

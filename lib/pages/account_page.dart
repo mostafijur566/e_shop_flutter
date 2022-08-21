@@ -74,9 +74,8 @@ class _AccountPageState extends State<AccountPage> {
     Get.lazyPut(() => UserInfoController(userInfoRepo: Get.find()));
 
     return Scaffold(
-      backgroundColor: AppColors.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.scaffoldBackgroundColor,
         title: Text('Profile', style: TextStyle(color: AppColors.mainBlackColor),),
         centerTitle: true,
         elevation: 0,

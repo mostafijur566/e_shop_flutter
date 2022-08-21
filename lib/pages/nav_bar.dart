@@ -1,5 +1,6 @@
 import 'package:e_shop_flutter/pages/account_page.dart';
 import 'package:e_shop_flutter/pages/cart_page.dart';
+import 'package:e_shop_flutter/pages/history_page.dart';
 import 'package:e_shop_flutter/pages/home_page.dart';
 import 'package:e_shop_flutter/utils/app_constants.dart';
 import 'package:flutter/cupertino.dart';
@@ -43,11 +44,7 @@ class _NavBarState extends State<NavBar> {
   List<Widget> _buildScreens() {
     return [
       const HomePage(),
-      Container(
-        child: Center(
-          child: Text('Empty'),
-        ),
-      ),
+      HistoryPage(),
       const AccountPage()
     ];
   }
@@ -62,7 +59,7 @@ class _NavBarState extends State<NavBar> {
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.archive),
-        title: ("Archive"),
+        title: ("History"),
         activeColorPrimary: AppColors.mainColor,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),

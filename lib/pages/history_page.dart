@@ -21,6 +21,7 @@ class _HistoryPageState extends State<HistoryPage> {
           "History",
           style: TextStyle(color: AppColors.mainBlackColor),
         ),
+        centerTitle: true,
         elevation: 0,
       ),
       body: Padding(
@@ -29,19 +30,40 @@ class _HistoryPageState extends State<HistoryPage> {
           children: [
             Expanded(
               child: ListView.builder(
-                  itemCount: 1,
+                  itemCount: 5,
                   itemBuilder: (context, index) {
                     return Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      margin: EdgeInsets.only(bottom: 10),
+                      padding: EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 20),
+                      width: double.maxFinite,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white,
+                          boxShadow: const [
+                            BoxShadow(
+                                color: Color(0xFFe8e8e8),
+                                blurRadius: 5.0,
+                                offset: Offset(0, 5)),
+                            BoxShadow(color: Colors.white, offset: Offset(-5, 0)),
+                          ]
+                      ),
+                      child: Row(
                         children: [
-                          BigText(text: "Invoice No: #001",),
-                          SizedBox(height: 5,),
-                          SmallText(text: "Payment Status: Bkash", size: 16,
-                            color: AppColors.paraColor,
-                          ),
-                          SizedBox(height: 5,),
-                          BigText(text: "Total Amount: 200", color: Colors.redAccent, size: 18,)
+                          Image.asset('assets/images/invoice_logo.png', height: MediaQuery.of(context).size.height * 0.1,),
+                          SizedBox(width: 20,),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              BigText(text: "Invoice No: #001",),
+                              SizedBox(height: 5,),
+
+                              SmallText(text: "Payment Status: Bkash", size: 16,
+                                color: AppColors.paraColor,
+                              ),
+                              SizedBox(height: 5,),
+                              BigText(text: "Total Amount: 200", color: Colors.redAccent, size: 18,)
+                            ],
+                          )
                         ],
                       ),
                     );

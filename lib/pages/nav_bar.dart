@@ -38,6 +38,8 @@ class _NavBarState extends State<NavBar> {
     await Get.find<CartController>().getCartItems();
 
     await Get.find<CartController>().getCartItems();
+
+    await Get.find<CartController>().getHistory();
   }
 
 

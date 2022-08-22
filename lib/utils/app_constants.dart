@@ -17,6 +17,8 @@ class AppConstants{
 
   static const String MAKE_ORDER_ENDPOINT = "/api/v1/order/";
 
+  static String HISTORY_ENDPOINT = "/api/v1/order/history/";
+
   static const String EMAIL = '';
 
   static const String PASSWORD = '';

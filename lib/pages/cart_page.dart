@@ -264,7 +264,8 @@ class _CartPageState extends State<CartPage> {
                 GestureDetector(
                   onTap: () {
 
-                    Get.to(PaymentPage(totalPrice: _cart.totalAmount, ordersId: _cart.orderId, cartId: Get.find<CartController>().orderId,));
+                    Get.to(
+                        PaymentPage(totalPrice: Get.find<CartController>().totalAmount, ordersId: _cart.orderId, cartId: Get.find<CartController>().orderId,));
                   },
                   child: Container(
                     padding:

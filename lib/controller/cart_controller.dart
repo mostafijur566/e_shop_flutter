@@ -1,6 +1,7 @@
 import 'package:e_shop_flutter/controller/product_details_controller.dart';
 import 'package:e_shop_flutter/data/repository/cart_repo.dart';
 import 'package:e_shop_flutter/models/cart_model.dart';
+import 'package:e_shop_flutter/models/history_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,6 +14,9 @@ class CartController extends GetxController{
 
   List<dynamic> _allCartItems = [];
   List<dynamic> get allCartItems => _allCartItems;
+
+  List<History> _allHistory = [];
+  List<History> get allHistory => _allHistory;
 
   List<int> _orderId = [];
   List<int> get orderId => _orderId;
@@ -89,4 +93,26 @@ class CartController extends GetxController{
       print('can not delete order');
     }
   }
+
+  Future<void> getHistory() async{
+    Response response = await cartRepo.getHistory();
+
+    if(response.statusCode == 200){
+      _allHistory = [];
+      _allHistory.addAll(OrderHistory.fromJson(response.body).allOrder);
+
+      _isLoading = true;
+      update();
+      print('Got history');
+    }
+
+    else{
+      // Get.snackbar('Error!', 'Please check your internet connection!',
+      //     colorText: Colors.white,
+      //     backgroundColor: Colors.redAccent
+      // );
+      print(response.body);
+    }
+  }
+
 }

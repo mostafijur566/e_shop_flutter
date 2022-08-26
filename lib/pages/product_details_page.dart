@@ -229,7 +229,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     ),
                   ),
                   BigText(
-                    text: 'Tk ${totalPrice} x $cartItem',
+                    text: 'Tk ${price} x $cartItem',
                     color: AppColors.mainBlackColor,
                     size: 26,
                   ),
@@ -274,6 +274,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       CartModel cartModel = CartModel(user: user, productId: int.parse(productId), quantity: cartItem, totalPrice: totalPrice);
                       _addToOrder(cartModel);
                       _addToCart(cartModel);
+                      loadResource();
                     },
                     child: Container(
                         padding: EdgeInsets.only(

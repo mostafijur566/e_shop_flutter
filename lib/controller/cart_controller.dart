@@ -107,10 +107,10 @@ class CartController extends GetxController{
     }
 
     else{
-      // Get.snackbar('Error!', 'Please check your internet connection!',
-      //     colorText: Colors.white,
-      //     backgroundColor: Colors.redAccent
-      // );
+      Get.snackbar('Error!', 'Please check your internet connection!',
+          colorText: Colors.white,
+          backgroundColor: Colors.redAccent
+      );
       print(response.body);
     }
   }

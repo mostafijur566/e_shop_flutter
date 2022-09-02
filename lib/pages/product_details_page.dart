@@ -31,6 +31,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   var image = '';
   var stock = '';
   var productId = '';
+  int cartItems = 0;
 
   int totalPrice = 0;
 
@@ -89,6 +90,11 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     price = Get.find<ProductDetailsController>().price.toString();
     stock = Get.find<ProductDetailsController>().stock.toString();
     totalPrice = int.parse(price);
+    await Get.find<CartController>().getCartItems();
+    cartItems = int.parse(Get.find<CartController>().cartItem.toString());
+    setState(() {
+
+    });
     setState(() {
       description = Get.find<ProductDetailsController>().description!;
     });
@@ -151,7 +157,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             Positioned(
                               right: int.parse(_cart.cartItem.toString()) <= 9 ? 6 : 3,
                               top: 3,
-                              child: BigText(text: _cart.cartItem == null? '' : _cart.cartItem.toString(), size: 12, color: Colors.white,
+                              child: BigText(text: _cart.cartItem == null? '' : cartItems.toString(), size: 12, color: Colors.white,
                               ),
                             ),
                           ],

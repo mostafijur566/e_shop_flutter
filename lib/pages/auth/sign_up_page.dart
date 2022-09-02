@@ -81,6 +81,7 @@ class _SignUpPageState extends State<SignUpPage> {
       SignUpBody signUpBody = SignUpBody(email: email, username: username, password: password);
       authController.registration(signUpBody).then((status) async{
         if(status.isSuccess){
+          print('created');
           Get.to(SignUpUserDetailsPage(user: username,));
         }
       });
